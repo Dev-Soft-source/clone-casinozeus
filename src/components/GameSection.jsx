@@ -4,6 +4,8 @@ import { Button } from './ui/button';
 import { ChevronRight } from 'lucide-react';
 
 export const GameSection = ({ title, games, onGameClick, icon }) => {
+  
+
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">

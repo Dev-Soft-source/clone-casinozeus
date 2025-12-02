@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
 import { ProviderFilter } from '../components/ProviderFilter';
 import { GameSection } from '../components/GameSection';
 import { PromoCards } from '../components/PromoCards';
-import { Footer } from '../components/Footer';
 import { GameModal } from '../components/GameModal';
 import { Sparkles, Star, Video, Zap, Clock } from 'lucide-react';
+import { Layout } from '../components/Layout';
+
 import {
   topSlotsGames,
   newGames,
@@ -31,6 +31,8 @@ export const HomePage = () => {
       return matchesProvider && matchesSearch;
     });
   };
+  
+
 
   const filteredTopSlots = useMemo(() => filterGames(topSlotsGames), [selectedProvider, searchQuery]);
   const filteredNewGames = useMemo(() => filterGames(newGames), [selectedProvider, searchQuery]);
@@ -49,9 +51,7 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header onSearch={setSearchQuery} />
-      
+    <Layout onSearch={setSearchQuery}>
       <main>
         <HeroSection />
         
@@ -124,13 +124,11 @@ export const HomePage = () => {
         <PromoCards />
       </main>
 
-      <Footer />
-
       <GameModal
         game={selectedGame}
         isOpen={isGameModalOpen}
         onClose={handleCloseModal}
       />
-    </div>
+    </Layout>      
   );
 };

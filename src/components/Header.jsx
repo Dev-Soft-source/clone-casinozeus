@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
-import { Search, User, Menu, X } from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
-import { Label } from './ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import React, { useState } from "react";
+import { Search, User, Menu, X } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
+import { Label } from "./ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { ReactComponent as CasinoZeus } from "../assets/img/domains/casinozeus.svg";
+import Profile from "../assets/custom-icons/misc/perfil.png";
+import Dinero from "../assets/custom-icons/misc/dinero.png";
 
 export const Header = ({ onSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -21,41 +30,57 @@ export const Header = ({ onSearch }) => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#1e1e1e] backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-8">
-              <a href="/" className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <span className="text-xl font-bold text-white">CN</span>
-                </div>
-                <span className="text-xl font-bold hidden sm:block">
-                  CASINO<span className="text-primary">XTREME</span>
-                </span>
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
+            {/* LEFT - Logo */}
+            <div className="flex items-center justify-start">
+              <a href="/">
+                <CasinoZeus alt="logo" className="h-9 w-auto" />
               </a>
-
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center space-x-6">
-                <a href="#casino" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Casino en Vivo
-                </a>
-                <a href="#slots" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Slots
-                </a>
-                <a href="#deportes" className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">
-                  Deportes
-                </a>
-                <a href="#soporte" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Soporte
-                </a>
-              </nav>
             </div>
 
-            {/* Right Section */}
-            <div className="flex items-center space-x-4">
-              {/* Search - Hidden on mobile */}
-              <div className="hidden md:block relative">
+            {/* CENTER - Navigation */}
+            <nav className="hidden lg:flex items-center justify-center space-x-4">
+              <a
+                href="#casino"
+                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+              >
+                Casino en Vivo
+              </a>
+
+              <span className="h-5 w-px bg-gray-500/40" />
+
+              <a
+                href="#slots"
+                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+              >
+                Slots
+              </a>
+
+              <span className="h-5 w-px bg-gray-500/40" />
+
+              <a
+                href="#deportes"
+                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+              >
+                Deportes
+              </a>
+
+              <span className="h-5 w-px bg-gray-500/40" />
+
+              <a
+                href="#soporte"
+                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+              >
+                Soporte
+              </a>
+            </nav>
+
+            {/* RIGHT - Search + Balance + User */}
+            <div className="flex items-center justify-end space-x-4">
+              {/* Search */}
+              {/* <div className="hidden md:block relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
@@ -64,37 +89,42 @@ export const Header = ({ onSearch }) => {
                   onChange={handleSearch}
                   className="pl-10 w-64 bg-secondary/50 border-border/50 focus:border-primary/50"
                 />
-              </div>
+              </div> */}
 
-              {/* Balance Display */}
-              <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-primary/20 to-accent/20 px-4 py-2 rounded-full border border-primary/30">
-                <span className="text-xs text-muted-foreground">Saldo:</span>
-                <span className="text-sm font-bold text-foreground">$320.50</span>
-              </div>
-
-              {/* User Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={() => setIsAuthOpen(true)}
-              >
-                <User className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="rounded-full bg-[#1a1a1a] hover:bg-[#1a1a1a]" >
+                <img src={Profile} className="w-5 h-5" />
               </Button>
 
-              {/* Mobile Menu Toggle */}
+              {/* Balance */}
+              <div className="hidden sm:flex items-center space-x-1 bg-gradient-to-r from-[#c22653] to-[#8b1e40] px-2 rounded-full shadow-inner">
+                <div className=" rounded-full p-1 flex items-center justify-center">
+                  <img src={Dinero} className="w-5 h-5" />
+                </div>
+
+                <span className="text-xs font-semibold text-white tracking-wide">
+                  ARS 0
+                </span>
+              </div>
+
+              {/* User BTN */}
+
+              {/* Mobile menu */}
               <Button
                 variant="ghost"
                 size="icon"
                 className="lg:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isMenuOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
               </Button>
             </div>
           </div>
 
-          {/* Mobile Search */}
+          {/* Mobile Search
           <div className="md:hidden pb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -106,23 +136,35 @@ export const Header = ({ onSearch }) => {
                 className="pl-10 w-full bg-secondary/50 border-border/50"
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden border-t border-border bg-card">
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-              <a href="#casino" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a
+                href="#casino"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 Casino en Vivo
               </a>
-              <a href="#slots" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a
+                href="#slots"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 Slots
               </a>
-              <a href="#deportes" className="text-sm text-primary font-medium">
+              <a
+                href="#deportes"
+                className="text-sm text-muted-foreground font-medium"
+              >
                 Deportes
               </a>
-              <a href="#soporte" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a
+                href="#soporte"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 Soporte
               </a>
             </nav>
@@ -168,7 +210,11 @@ export const Header = ({ onSearch }) => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password-reg">Contraseña</Label>
-                <Input id="password-reg" type="password" placeholder="••••••••" />
+                <Input
+                  id="password-reg"
+                  type="password"
+                  placeholder="••••••••"
+                />
               </div>
               <Button className="w-full" onClick={() => setIsAuthOpen(false)}>
                 Crear Cuenta

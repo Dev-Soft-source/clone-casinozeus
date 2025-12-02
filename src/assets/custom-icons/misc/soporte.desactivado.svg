@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 671.11 654.22">
+  <!-- Generator: Adobe Illustrator 29.7.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 8)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke-linecap: round;
+      }
+
+      .st0, .st1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linejoin: round;
+        stroke-width: 66.67px;
+      }
+    </style>
+  </defs>
+  <g id="SVGRepo_iconCarrier">
+    <path class="st0" d="M202.56,268.33h.33"/>
+    <path class="st0" d="M335.89,268.33h.33"/>
+    <path class="st0" d="M469.22,268.33h.33"/>
+    <path class="st1" d="M635.89,368.33v-200c0-62.85,0-94.28-19.53-113.81-19.53-19.53-50.95-19.53-113.81-19.53H169.22c-62.85,0-94.28,0-113.81,19.53-19.53,19.53-19.53,50.95-19.53,113.81v200c0,62.85,0,94.28,19.53,113.81,19.53,19.53,50.95,19.53,113.81,19.53h16.67c9.2,0,16.67,7.46,16.67,16.67v88.33c0,11.79,13.38,18.61,22.92,11.67l146.94-106.86c8.76-6.37,19.31-9.8,30.15-9.8h100c62.85,0,94.28,0,113.81-19.53s19.53-50.95,19.53-113.81Z"/>
+  </g>
+</svg>
