@@ -5,6 +5,10 @@ import { GameSection } from '../components/GameSection';
 import { PromoCards } from '../components/PromoCards';
 import { GameModal } from '../components/GameModal';
 import { Sparkles, Star, Video, Zap, Clock } from 'lucide-react';
+import Slots from '../assets/custom-icons/slots.png';
+import Megaways from '../assets/custom-icons/megaways.png';
+import Nuevos from '../assets/custom-icons/nuevo.webp';
+import BlackJack from '../assets/custom-icons/blackjack.webp';
 import { Layout } from '../components/Layout';
 
 import {
@@ -38,7 +42,6 @@ export const HomePage = () => {
   const filteredNewGames = useMemo(() => filterGames(newGames), [selectedProvider, searchQuery]);
   const filteredLiveCasino = useMemo(() => filterGames(liveCasinoGames), [selectedProvider, searchQuery]);
   const filteredMegaways = useMemo(() => filterGames(megawaysGames), [selectedProvider, searchQuery]);
-  const filteredRecentlyPlayed = useMemo(() => filterGames(recentlyPlayedGames), [selectedProvider, searchQuery]);
 
   const handleGameClick = (game) => {
     setSelectedGame(game);
@@ -66,8 +69,7 @@ export const HomePage = () => {
           filteredTopSlots.length === 0 &&
           filteredNewGames.length === 0 &&
           filteredLiveCasino.length === 0 &&
-          filteredMegaways.length === 0 &&
-          filteredRecentlyPlayed.length === 0
+          filteredMegaways.length === 0
         ) && (
           <div className="container mx-auto px-4 py-12 text-center">
             <p className="text-muted-foreground">
@@ -81,7 +83,8 @@ export const HomePage = () => {
             title="Top Slots"
             games={filteredTopSlots}
             onGameClick={handleGameClick}
-            icon={<Star className="h-6 w-6 text-primary fill-primary" />}
+            icon={Slots}
+            // icon={<Star className="h-6 w-6 text-primary fill-primary" />}
           />
         )}
 
@@ -90,7 +93,7 @@ export const HomePage = () => {
             title="Nuevos"
             games={filteredNewGames}
             onGameClick={handleGameClick}
-            icon={<Sparkles className="h-6 w-6 text-accent" />}
+            icon={Nuevos}
           />
         )}
 
@@ -99,7 +102,7 @@ export const HomePage = () => {
             title="Top Live Casino"
             games={filteredLiveCasino}
             onGameClick={handleGameClick}
-            icon={<Video className="h-6 w-6 text-primary" />}
+            icon={BlackJack}
           />
         )}
 
@@ -108,19 +111,10 @@ export const HomePage = () => {
             title="Megaways"
             games={filteredMegaways}
             onGameClick={handleGameClick}
-            icon={<Zap className="h-6 w-6 text-accent" />}
+            icon={Megaways}
           />
         )}
-
-        {filteredRecentlyPlayed.length > 0 && (
-          <GameSection
-            title="Recientemente jugado"
-            games={filteredRecentlyPlayed}
-            onGameClick={handleGameClick}
-            icon={<Clock className="h-6 w-6 text-muted-foreground" />}
-          />
-        )}
-
+        
         <PromoCards />
       </main>
 

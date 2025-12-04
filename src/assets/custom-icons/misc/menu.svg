@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 256 256">
+  <!-- Generator: Adobe Illustrator 29.5.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 137)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+        stroke: #fff;
+        stroke-miterlimit: 42.67;
+        stroke-width: 8.53px;
+      }
+    </style>
+  </defs>
+  <g id="SVGRepo_iconCarrier">
+    <path class="st0" d="M249,47.33c0,7.43-6.02,13.44-13.44,13.44H20.44c-7.43,0-13.44-6.02-13.44-13.44s6.02-13.44,13.44-13.44h215.11c7.43,0,13.44,6.02,13.44,13.44ZM249,128c0,7.43-6.02,13.44-13.44,13.44H20.44c-7.43,0-13.44-6.02-13.44-13.44s6.02-13.44,13.44-13.44h215.11c7.43,0,13.44,6.02,13.44,13.44ZM235.56,222.11c7.43,0,13.44-6.02,13.44-13.44s-6.02-13.44-13.44-13.44H20.44c-7.43,0-13.44,6.02-13.44,13.44s6.02,13.44,13.44,13.44h215.11Z"/>
+  </g>
+</svg>

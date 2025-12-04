@@ -1,144 +1,86 @@
 import React, { useState } from "react";
 import { Search, User, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "./ui/dialog";
-import { Label } from "./ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { LoginModal } from "./Modals/LoginModal";
+import { UpdatePasswordModal } from "./Modals/UpdatePasswordModal";
 import { ReactComponent as CasinoZeus } from "../assets/img/domains/casinozeus.svg";
 import Profile from "../assets/custom-icons/misc/perfil.png";
 import Dinero from "../assets/custom-icons/misc/dinero.png";
+import Unregister from "../assets/custom-icons/misc/login.png";
+import MenuImg from "../assets/custom-icons/misc/menu.svg";
 
-export const Header = ({ onSearch }) => {
+export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    if (onSearch) {
-      onSearch(value);
-    }
-  };
+  const [isAuth, setIsAuth] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#1e1e1e] backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
+          {/* Use relative to allow absolute centering of nav */}
+          <div className="relative flex items-center h-16">
+
             {/* LEFT - Logo */}
-            <div className="flex items-center justify-start">
+            <div className="flex items-center">
               <a href="/">
-                <CasinoZeus alt="logo" className="h-9 w-auto" />
+                <CasinoZeus className="h-9 w-auto" />
               </a>
             </div>
 
-            {/* CENTER - Navigation */}
-            <nav className="hidden lg:flex items-center justify-center space-x-4">
-              <a
-                href="#casino"
-                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-              >
-                Casino en Vivo
-              </a>
-
+            {/* CENTER - nav (absolute centered on desktop) */}
+            <nav className="hidden lg:flex items-center absolute left-1/2 transform -translate-x-1/2 space-x-4">
+              <a href="#casino" className="text-muted-foreground text-sm hover:text-foreground">Casino en Vivo</a>
               <span className="h-5 w-px bg-gray-500/40" />
-
-              <a
-                href="#slots"
-                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-              >
-                Slots
-              </a>
-
+              <a href="#slots" className="text-muted-foreground text-sm hover:text-foreground">Slots</a>
               <span className="h-5 w-px bg-gray-500/40" />
-
-              <a
-                href="#deportes"
-                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-              >
-                Deportes
-              </a>
-
+              <a href="#deportes" className="text-muted-foreground text-sm hover:text-foreground">Deportes</a>
               <span className="h-5 w-px bg-gray-500/40" />
-
-              <a
-                href="#soporte"
-                className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-              >
-                Soporte
-              </a>
+              <a href="#soporte" className="text-muted-foreground text-sm hover:text-foreground">Soporte</a>
             </nav>
 
-            {/* RIGHT - Search + Balance + User */}
-            <div className="flex items-center justify-end space-x-4">
-              {/* Search */}
-              {/* <div className="hidden md:block relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Buscar juegos..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="pl-10 w-64 bg-secondary/50 border-border/50 focus:border-primary/50"
-                />
-              </div> */}
+            {/* RIGHT - make this take remaining space so its children can align right */}
+            <div className="ml-auto flex items-center space-x-4">
+              {!isAuth ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-pink-700"
+                  onClick={() => setIsAuthOpen(true)}
+                >
+                  <img src={Unregister} className="w-3 h-3 lg:w-5 lg:h-5" />
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full bg-[#1a1a1a] hover:bg-[#1a1a1a]"
+                    onClick={() => setOpen(true)}
+                  >
+                    <img src={Profile} className="w-5 h-5" />
+                  </Button>
 
-              <Button variant="ghost" size="icon" className="rounded-full bg-[#1a1a1a] hover:bg-[#1a1a1a]" >
-                <img src={Profile} className="w-5 h-5" />
-              </Button>
+                  <div className="flex items-center space-x-1 bg-gradient-to-r from-[#c22653] to-[#8b1e40] px-2 rounded-full shadow-inner">
+                    <div className="rounded-full p-1 flex items-center justify-center">
+                      <img src={Dinero} className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-semibold text-white tracking-wide">ARS 12345</span>
+                  </div>
+                </>
+              )}
 
-              {/* Balance */}
-              <div className="hidden sm:flex items-center space-x-1 bg-gradient-to-r from-[#c22653] to-[#8b1e40] px-2 rounded-full shadow-inner">
-                <div className=" rounded-full p-1 flex items-center justify-center">
-                  <img src={Dinero} className="w-5 h-5" />
-                </div>
-
-                <span className="text-xs font-semibold text-white tracking-wide">
-                  ARS 0
-                </span>
-              </div>
-
-              {/* User BTN */}
-
-              {/* Mobile menu */}
+              {/* MOBILE MENU BUTTON - always at right because parent has ml-auto */}
               <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
+                className="lg:hidden bg-[#1e1e1e] hover:bg-[#1e1e1e]"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Menu className="h-5 w-5" />
-                )}
+              > 
+                <img src={MenuImg} className="w-5 h-5"></img>
               </Button>
             </div>
           </div>
-
-          {/* Mobile Search
-          <div className="md:hidden pb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Buscar juegos..."
-                value={searchQuery}
-                onChange={handleSearch}
-                className="pl-10 w-full bg-secondary/50 border-border/50"
-              />
-            </div>
-          </div> */}
         </div>
-
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden border-t border-border bg-card">
@@ -172,7 +114,7 @@ export const Header = ({ onSearch }) => {
         )}
       </header>
 
-      {/* Auth Dialog */}
+      {/* Auth Dialog
       <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -223,6 +165,10 @@ export const Header = ({ onSearch }) => {
           </Tabs>
         </DialogContent>
       </Dialog>
+       */}
+      <LoginModal open={isAuthOpen} onOpenChange={setIsAuthOpen} />
+
+      <UpdatePasswordModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

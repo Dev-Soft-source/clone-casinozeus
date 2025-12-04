@@ -7,13 +7,14 @@ export const GameSection = ({ title, games, onGameClick, icon }) => {
   
 
   return (
-    <section className="py-8">
-      <div className="container mx-auto px-4">
+    <section>
+      <div className="container mx-auto px-4 mt-6">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
-            {icon && <span className="text-2xl">{icon}</span>}
-            <h2 className="text-2xl sm:text-3xl font-bold">{title}</h2>
+            <img src={icon} className='w-5 h-5'></img>
+            {/* {icon && <span className="text-2xl">{icon}</span>} */}
+            <h2 className="font-sans text-[20px] font-bold">{title}</h2>
           </div>
           <Button variant="ghost" className="text-primary hover:text-primary/80">
             Ver Más
@@ -22,7 +23,7 @@ export const GameSection = ({ title, games, onGameClick, icon }) => {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-4">
           {games.map((game) => (
             <GameCard key={game.id} game={game} onClick={onGameClick} />
           ))}

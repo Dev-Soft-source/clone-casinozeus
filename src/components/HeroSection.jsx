@@ -16,15 +16,15 @@ export const HeroSection = () => {
     const interval = setInterval(() => {
       setPrev(current);
       setCurrent((prevIdx) => (prevIdx + 1) % images.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [current, images.length]);
 
   return (
-    <div className="flex justify-center items-center px-10 w-full">
+    <div className="flex justify-center items-center px-2 w-full">
       <section className="relative mt-4 w-full container rounded-2xl overflow-hidden">
-        <div className="relative h-[280px] md:h-[360px]">
+        <div className="relative h-[180px] md:h-[360px]">
           <div className="absolute inset-0 overflow-hidden">
             {images.map((img, index) => {
               let animationClass = "";
@@ -40,6 +40,16 @@ export const HeroSection = () => {
                 />
               );
             })}
+          </div>
+
+          {/* Spot indicators */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full ${index === current ? 'bg-red-500' : 'bg-gray-400'}`}
+              />
+            ))}
           </div>
         </div>
       </section>
