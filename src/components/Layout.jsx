@@ -12,9 +12,6 @@ import { useCommonMediaQueries } from "../features/common_funcs/useCommonMediaQu
 
 export const Layout = ({ children, onSearch }) => {
 
-  const { largeScreen, xxSmallScreen } = useCommonMediaQueries();
-
-  console.log("largeSCreen: ", largeScreen);
 
   return (
     <div className="min-h-screen bg-background">

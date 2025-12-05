@@ -1,11 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { ReactComponent as CasinoZeus } from "../../assets/img/domains/casinozeus.svg";
+import { useUser } from "../../features/user/useUser";
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 export function LoginModal({ open, onOpenChange }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const modalRef = useRef(null);
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const { logIn, isLogInLoading } = useUser();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    // call logIn, and close dialog only on success
+    logIn(username, password, () => {
+      startClose(); // close modal
+      const redirect = localStorage.getItem("redirectAfterLogin");
+      if (redirect) {
+        navigate(redirect, { replace: true });
+        localStorage.removeItem("redirectAfterLogin");
+      } else {
+        navigate("/", { replace: true });
+      }
+    });
+  };
 
   // ESC close
   useEffect(() => {
@@ -67,13 +91,17 @@ export function LoginModal({ open, onOpenChange }) {
         </div>
 
         {/* Form */}
+        <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           {/* Username */}
           <div>
             <label className="text-[12px] text-gray-300">Usuario</label>
             <input
               type="text"
-              className="w-full mt-1 rounded-full bg-white/95 px-4 py-2.5 h-9 focus:outline-none focus:ring-2 focus:ring-pink-600"
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}              
+              className="w-full mt-1 rounded-full bg-white/95 px-4 py-2.5 h-9 focus:outline-2"
+              required
             />
           </div>
 
@@ -83,8 +111,11 @@ export function LoginModal({ open, onOpenChange }) {
 
             <div className="flex items-center w-full mt-1 bg-white rounded-full overflow-hidden">
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
                 className="flex-1 bg-transparent px-4 py-2.5 text-black h-9 focus:outline-none"
+                required
               />
 
               <button
@@ -102,7 +133,7 @@ export function LoginModal({ open, onOpenChange }) {
           </div>
 
           <div className="w-full flex justify-end mt-5">
-            <button className="group h-8 w-[80px] rounded-full p-[2px] mt-5 bg-blue-600 shadow-[0_0_8px_rgba(0,0,0,0.4)]">
+            <button type="submit" className="group h-8 w-[80px] rounded-full p-[2px] mt-5 bg-blue-600 shadow-[0_0_8px_rgba(0,0,0,0.4)]">
               <span
                 className="flex items-center justify-center w-full h-full rounded-full bg-gradient-to-r from-pink-600 to-pink-700
                                         text-white font-semibold text-sm tracking-wide group-hover:from-pink-700 group-hover:to-pink-800 transition-all duration-300"
@@ -112,6 +143,8 @@ export function LoginModal({ open, onOpenChange }) {
             </button>
           </div>
         </div>
+        </form>
+        
       </div>
     </div>
   );

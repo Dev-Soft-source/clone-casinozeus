@@ -23,6 +23,8 @@ export const useUser = () => {
   const { setLocalizedError, handleNetworkErrors } = useLanguage();
   const user = useAppSelector((state) => state.user.user ?? null);
   const token = useAppSelector((state) => state.user.token ?? null);
+
+  
   const isLogInLoading = useAppSelector(
     (state) => state.user.isLogInLoading ?? false
   );
@@ -36,8 +38,9 @@ export const useUser = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const apiURL = getApiHost();
-
   const { contextData, updateSession } = useContext(AppContext);
+
+  
 
   const logIn = useCallback(
     (username, password, onSuccess = () => { }) => {
@@ -47,7 +50,7 @@ export const useUser = () => {
         username,
         password,
       };
-
+      
       dispatch(setLogInLoading(true));
       localStorage.removeItem(`${Config.localStoragePrefix}autoLogoutTime`);
 
@@ -63,16 +66,34 @@ export const useUser = () => {
 
           if (user) dispatch(setUser(user));
           if (token) dispatch(setToken(token));
+          enqueueSnackbar("¡Inicio de sesión exitoso!", {
+            variant: "success",
+            autoHideDuration: 5000,
+            onExited: () => {
+            },
+          });
 
           onSuccess();
           //window.location.reload();
         } else {
           const error = {"code": 6, "message": "wrong username or password"};
+          enqueueSnackbar("¡Error al iniciar sesión! Por favor, compruebe sus credenciales.", {
+            variant: "error",
+            autoHideDuration: 5000,
+            onExited: () => {
+            },
+          });
           setLocalizedError(error);
         }
+        dispatch(setLogInLoading(false)); // ✅ always reset loading
       };
 
-      callApi(contextData, "POST", "/login/", callbackSubmitLogin, JSON.stringify(body));
+      try {
+        callApi(contextData, "POST", "/login/", callbackSubmitLogin, JSON.stringify(body));
+      } catch (err) {
+        dispatch(setLogInLoading(false));
+        showErrorToast("¡Error de red! Por favor, inténtelo de nuevo.");
+      }
     },
     [apiURL, dispatch, contextData]
   );
@@ -161,6 +182,12 @@ export const useUser = () => {
               onSuccess();
             }
             else {
+              enqueueSnackbar("Hubo un error al cambiar la contraseña.", {
+                variant: "error",
+                autoHideDuration: 5000,
+                onExited: () => {
+                },
+              });
               const error = { "code": 25, "message": "New password missing" };
               handleNetworkErrors(error);
             }

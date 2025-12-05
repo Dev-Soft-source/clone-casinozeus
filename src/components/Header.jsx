@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Search, User, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { LoginModal } from "./Modals/LoginModal";
 import { UpdatePasswordModal } from "./Modals/UpdatePasswordModal";
+import { useUser } from "@/features/user/useUser";
+
 import { ReactComponent as CasinoZeus } from "../assets/img/domains/casinozeus.svg";
 import Profile from "../assets/custom-icons/misc/perfil.png";
 import Dinero from "../assets/custom-icons/misc/dinero.png";
@@ -14,6 +15,7 @@ export const Header = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAuth, setIsAuth] = useState(true);
   const [open, setOpen] = useState(false);
+  const {user, token, logOut} = useUser();
 
   return (
     <>
@@ -21,7 +23,6 @@ export const Header = () => {
         <div className="container mx-auto px-4">
           {/* Use relative to allow absolute centering of nav */}
           <div className="relative flex items-center h-16">
-
             {/* LEFT - Logo */}
             <div className="flex items-center">
               <a href="/">
@@ -31,26 +32,57 @@ export const Header = () => {
 
             {/* CENTER - nav (absolute centered on desktop) */}
             <nav className="hidden lg:flex items-center absolute left-1/2 transform -translate-x-1/2 space-x-4">
-              <a href="#casino" className="text-muted-foreground text-sm hover:text-foreground">Casino en Vivo</a>
+              <a
+                href="#casino"
+                className="text-muted-foreground text-sm hover:text-foreground"
+              >
+                Casino en Vivo
+              </a>
               <span className="h-5 w-px bg-gray-500/40" />
-              <a href="#slots" className="text-muted-foreground text-sm hover:text-foreground">Slots</a>
+              <a
+                href="#slots"
+                className="text-muted-foreground text-sm hover:text-foreground"
+              >
+                Slots
+              </a>
               <span className="h-5 w-px bg-gray-500/40" />
-              <a href="#deportes" className="text-muted-foreground text-sm hover:text-foreground">Deportes</a>
+              <a
+                href="#deportes"
+                className="text-muted-foreground text-sm hover:text-foreground"
+              >
+                Deportes
+              </a>
               <span className="h-5 w-px bg-gray-500/40" />
-              <a href="#soporte" className="text-muted-foreground text-sm hover:text-foreground">Soporte</a>
+              <a
+                href="#soporte"
+                className="text-muted-foreground text-sm hover:text-foreground"
+              >
+                Soporte
+              </a>
             </nav>
 
             {/* RIGHT - make this take remaining space so its children can align right */}
             <div className="ml-auto flex items-center space-x-4">
-              {!isAuth ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-pink-700"
-                  onClick={() => setIsAuthOpen(true)}
-                >
-                  <img src={Unregister} className="w-3 h-3 lg:w-5 lg:h-5" />
-                </Button>
+              {!user ? (
+                <div className="relative group">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full hover:bg-[#1e1e1e]"
+                    onClick={() => setIsAuthOpen(true)}
+                  >
+                    <img src={Unregister} className="w-3 h-3 lg:w-5 lg:h-5" />
+                  </Button>
+
+                  {/* Tooltip */}
+                  <span
+                    className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm
+                                 bg-black text-white px-2 py-2 rounded 
+                                 opacity-0 group-hover:opacity-100 transition"
+                  >
+                    Login
+                  </span>
+                </div>
               ) : (
                 <>
                   <Button
@@ -66,7 +98,9 @@ export const Header = () => {
                     <div className="rounded-full p-1 flex items-center justify-center">
                       <img src={Dinero} className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-semibold text-white tracking-wide">ARS 12345</span>
+                    <span className="text-xs font-semibold text-white tracking-wide">
+                      ARS 12345
+                    </span>
                   </div>
                 </>
               )}
@@ -75,7 +109,7 @@ export const Header = () => {
               <Button
                 className="lg:hidden bg-[#1e1e1e] hover:bg-[#1e1e1e]"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-              > 
+              >
                 <img src={MenuImg} className="w-5 h-5"></img>
               </Button>
             </div>
