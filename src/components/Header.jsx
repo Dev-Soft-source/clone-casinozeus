@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "./ui/button";
 import { LoginModal } from "./Modals/LoginModal";
 import { UpdatePasswordModal } from "./Modals/UpdatePasswordModal";
 import { useUser } from "@/features/user/useUser";
-
+import { SupportModal } from "./Modals/SupportModal";
 import { ReactComponent as CasinoZeus } from "../assets/img/domains/casinozeus.svg";
 import Profile from "../assets/custom-icons/misc/perfil.png";
 import Dinero from "../assets/custom-icons/misc/dinero.png";
 import Unregister from "../assets/custom-icons/misc/login.png";
 import MenuImg from "../assets/custom-icons/misc/menu.svg";
+import { AppContext } from "@/AppContext";
 
-export const Header = () => {
+export const Header = ({address}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isAuth, setIsAuth] = useState(true);
   const [open, setOpen] = useState(false);
-  const {user, token, logOut} = useUser();
+  const {user} = useUser();
+  const { contextData } = useContext(AppContext);
+  const [ support, setSupport ] = useState(false);
+
+  const session = localStorage.getItem("session");
+  if(!session)
+  {
+    localStorage.removeItem("Casinozeus_user");
+    localStorage.removeItem("Casinozeus_token");
+  }
 
   return (
     <>
@@ -33,28 +42,35 @@ export const Header = () => {
             {/* CENTER - nav (absolute centered on desktop) */}
             <nav className="hidden lg:flex items-center absolute left-1/2 transform -translate-x-1/2 space-x-4">
               <a
-                href="#casino"
+                href="/casino"
+                className="text-muted-foreground text-sm hover:text-foreground"
+              >
+                Casino
+              </a>
+              <span className="h-5 w-px bg-gray-500/40" />
+              <a
+                href="/live-casino"
                 className="text-muted-foreground text-sm hover:text-foreground"
               >
                 Casino en Vivo
               </a>
               <span className="h-5 w-px bg-gray-500/40" />
               <a
-                href="#slots"
+                href="/crash"
                 className="text-muted-foreground text-sm hover:text-foreground"
               >
-                Slots
+                Crash
               </a>
               <span className="h-5 w-px bg-gray-500/40" />
               <a
-                href="#deportes"
+                href="/sport"
                 className="text-muted-foreground text-sm hover:text-foreground"
               >
                 Deportes
               </a>
               <span className="h-5 w-px bg-gray-500/40" />
               <a
-                href="#soporte"
+                onClick={() => setSupport(true)}
                 className="text-muted-foreground text-sm hover:text-foreground"
               >
                 Soporte
@@ -63,27 +79,7 @@ export const Header = () => {
 
             {/* RIGHT - make this take remaining space so its children can align right */}
             <div className="ml-auto flex items-center space-x-4">
-              {!user ? (
-                <div className="relative group">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full hover:bg-[#1e1e1e]"
-                    onClick={() => setIsAuthOpen(true)}
-                  >
-                    <img src={Unregister} className="w-3 h-3 lg:w-5 lg:h-5" />
-                  </Button>
-
-                  {/* Tooltip */}
-                  <span
-                    className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm
-                                 bg-black text-white px-2 py-2 rounded 
-                                 opacity-0 group-hover:opacity-100 transition"
-                  >
-                    Login
-                  </span>
-                </div>
-              ) : (
+              {user && session ? (
                 <>
                   <Button
                     variant="ghost"
@@ -99,10 +95,26 @@ export const Header = () => {
                       <img src={Dinero} className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-semibold text-white tracking-wide">
-                      ARS 12345
+                      {Math.trunc(user.balance)}
                     </span>
                   </div>
                 </>
+              ) : (
+                <div className="relative group">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full hover:bg-[#1e1e1e]"
+                    onClick={() => setIsAuthOpen(true)}
+                  >
+                    <img src={Unregister} className="w-3 h-3 lg:w-5 lg:h-5" />
+                  </Button>
+
+                  {/* Tooltip */}
+                  <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm bg-black text-white px-2 py-2 rounded opacity-0 group-hover:opacity-100 transition">
+                    Login
+                  </span>
+                </div>
               )}
 
               {/* MOBILE MENU BUTTON - always at right because parent has ml-auto */}
@@ -203,6 +215,8 @@ export const Header = () => {
       <LoginModal open={isAuthOpen} onOpenChange={setIsAuthOpen} />
 
       <UpdatePasswordModal open={open} onClose={() => setOpen(false)} />
+
+      {support&& <SupportModal address={address} close={() => setSupport(false)}/>}
     </>
   );
 };

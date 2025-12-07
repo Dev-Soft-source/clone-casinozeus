@@ -144,6 +144,7 @@ export const useUser = () => {
   const logOut = useCallback(() => {
     if (token && apiURL) {
       callApi(contextData, "POST", "/logout", (result) => {
+        
         if (result.status === "success") {
           setTimeout(() => {
             dispatch(clearUser());
@@ -151,6 +152,8 @@ export const useUser = () => {
             navigate(PATHS.home, { replace: true });
           }, 200);
         } else {
+          dispatch(clearUser());
+          dispatch(clearToken());
           dispatch(setOutcomeGames([]));
           const error = {"code": 16, "message": "Action does not exist"};
           handleNetworkErrors(error);

@@ -11,7 +11,7 @@ import {
 } from "./gamesSlice";
 import axios from "axios";
 import Config, { getApiHost } from "../../utils/config";
-import LoaderService, { ApiRequest } from "../../components/games/hooks/loaderService";
+import LoaderService, { ApiRequest } from "./LoaderService";
 import { getDeviceType } from "../common_funcs";
 import { Loader } from "./models/loaders";
 import { callApi, callApiService } from "../../utils/Utils";
@@ -113,7 +113,6 @@ export const useGames = () => {
 
       dispatch(setPlayGamesLoader({ loader: Loader.isGameSessionLoading, isLoading: false }));
     } else if (result.status == "500" || result.status == "422") {
-
       
       const error = { "code": 50, "message": "ID missing" };
       handleNetworkErrors(error);
@@ -124,7 +123,7 @@ export const useGames = () => {
     (gameId) => {
       if (!token || !apiURL) return;
       dispatch(setPlayGamesLoader({ loader: Loader.isGameSessionLoading, isLoading: true }));
-      
+
       callApi(contextData, "GET", "/get-game-url?game_id=" + gameId, callbackGameSession, null);
     },
     [apiURL, dispatch, handleNetworkErrors, langShort, setLocalizedError, token]

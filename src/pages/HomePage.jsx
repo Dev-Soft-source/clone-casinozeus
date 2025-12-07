@@ -1,128 +1,164 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { HeroSection } from '../components/HeroSection';
 import { ProviderFilter } from '../components/ProviderFilter';
 import { GameSection } from '../components/GameSection';
 import { PromoCards } from '../components/PromoCards';
-import { GameModal } from '../components/GameModal';
-import { Sparkles, Star, Video, Zap, Clock } from 'lucide-react';
+import { AppContext } from '@/AppContext';
+import { callApi } from '@/utils/Utils';
 import Slots from '../assets/custom-icons/slots.png';
 import Megaways from '../assets/custom-icons/megaways.png';
 import Nuevos from '../assets/custom-icons/nuevo.webp';
 import BlackJack from '../assets/custom-icons/blackjack.webp';
 import { Layout } from '../components/Layout';
+import { PATHS } from '@/features/navigation/paths';
 
-import {
-  topSlotsGames,
-  newGames,
-  liveCasinoGames,
-  megawaysGames,
-  recentlyPlayedGames,
-  providers,
-} from '../data/mockGames';
+export const HomePage = ({ categories, address }) => {
+  const [ topCasino, setTopCasino ] = useState([]);
+  const [ topLiveGames, setTopLiveGames ] = useState([]);
+  const [ topCrash, setTopCrash ] = useState([]);
+  const {contextData} = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(true);
 
-export const HomePage = () => {
-  const [selectedProvider, setSelectedProvider] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [isGameModalOpen, setIsGameModalOpen] = useState(false);
+  const calledRef = useRef(false);
+  const [topGames, setTopGames] = useState([]);
+  const [topLiveCasino, setTopLiveCasino] = useState([]);
+  const [topCrashGames, setTopCrashGames] = useState([]);
 
-  // Filter games based on provider and search
-  const filterGames = (games) => {
-    return games.filter((game) => {
-      const matchesProvider = selectedProvider === 'all' || game.provider === selectedProvider;
-      const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           (game.provider && game.provider.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesProvider && matchesSearch;
-    });
+  const getCategories = () => {
+    callApi(contextData, "GET", "/get-status", callbackGetCategories, null);
   };
+
+  const callbackGetCategories = (result) => {
+    if (result.status === 500 || result.status === 422) {
+      setMessageCustomAlert(["error", result.message]);
+    } else {
+      setTopGames(result.top_slot);
+      setTopLiveCasino(result.top_livecasino);
+      setTopCrashGames(result.top_arcade);
+    }
+  };
+
+  useEffect(() => {
+    if (calledRef.current) return;
+    calledRef.current = true;
+    getCategories();
+  }, []);
+ 
+  useEffect(() => {
+    if (topGames && topGames.length > 0) {
+      const games = topGames.map(game => {
+        let imageDataSrc = game.image_url;
+        if (game.image_local !== null) {
+          imageDataSrc = contextData.cdnUrl + game.image_local;
+        }
+        return {
+          id: game.id,
+          title: game.name,
+          players: game.plays,
+          image: imageDataSrc,
+        };
+      });
+      setTopCasino(games);
+    }
+  }, [topGames]);
+
+  useEffect(() => {
+    if (topLiveCasino && topLiveCasino.length > 0) {
+      const games = topLiveCasino.map(game => {
+        let imageDataSrc = game.image_url;
+        if (game.image_local !== null) {
+          imageDataSrc = contextData.cdnUrl + game.image_local;
+        }
+        return {
+          id: game.id,
+          title: game.name,
+          players: game.plays,
+          image: imageDataSrc,
+        };
+      });
+      setTopLiveGames(games);
+    }
+  }, [topLiveCasino]);
+
+  useEffect(() => {
+    if (topCrashGames && topCrashGames.length > 0) {
+      const games = topCrashGames.map(game => {
+        let imageDataSrc = game.image_url;
+        if (game.image_local !== null) {
+          imageDataSrc = contextData.cdnUrl + game.image_local;
+        }
+        return {
+          id: game.id,
+          title: game.name,
+          players: game.plays,
+          image: imageDataSrc,
+        };
+      });
+      setTopCrash(games);
+    }
+  }, [topCrashGames]);
+
+  useEffect(() => {
+    const hasAllData =
+      topGames && topGames.length > 0 &&
+      topLiveCasino && topLiveCasino.length > 0 &&
+      topCrashGames && topCrashGames.length > 0;
   
+    if (hasAllData) {
+      setIsLoading(false);
+    }
+  }, [topGames, topLiveCasino, topCrashGames]);
 
+  const Spinner = () => (
+    <div className="flex items-center justify-center h-screen">
+      <div className="w-10 h-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+    </div>
+  );
 
-  const filteredTopSlots = useMemo(() => filterGames(topSlotsGames), [selectedProvider, searchQuery]);
-  const filteredNewGames = useMemo(() => filterGames(newGames), [selectedProvider, searchQuery]);
-  const filteredLiveCasino = useMemo(() => filterGames(liveCasinoGames), [selectedProvider, searchQuery]);
-  const filteredMegaways = useMemo(() => filterGames(megawaysGames), [selectedProvider, searchQuery]);
-
-  const handleGameClick = (game) => {
-    setSelectedGame(game);
-    setIsGameModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsGameModalOpen(false);
-    setTimeout(() => setSelectedGame(null), 300);
-  };
+  if (isLoading) {
+    return (
+        <Spinner />
+    );
+  }
 
   return (
-    <Layout onSearch={setSearchQuery}>
+    <Layout address={address} >
       <main>
         <HeroSection />
         
-        <ProviderFilter
-          providers={providers}
-          selectedProvider={selectedProvider}
-          onProviderChange={setSelectedProvider}
-        />
+        <ProviderFilter providers={categories}/>
 
-        {/* Show message if search returns no results */}
-        {searchQuery && (
-          filteredTopSlots.length === 0 &&
-          filteredNewGames.length === 0 &&
-          filteredLiveCasino.length === 0 &&
-          filteredMegaways.length === 0
-        ) && (
-          <div className="container mx-auto px-4 py-12 text-center">
-            <p className="text-muted-foreground">
-              No se encontraron juegos para "{searchQuery}"
-            </p>
-          </div>
-        )}
-
-        {filteredTopSlots.length > 0 && (
+        {topGames.length > 0 && (
           <GameSection
-            title="Top Slots"
-            games={filteredTopSlots}
-            onGameClick={handleGameClick}
+            title="Juegos Principales"
+            games={topCasino}
             icon={Slots}
+            link={PATHS.casino}
             // icon={<Star className="h-6 w-6 text-primary fill-primary" />}
           />
         )}
 
-        {filteredNewGames.length > 0 && (
+        {topLiveCasino.length > 0 && (
           <GameSection
-            title="Nuevos"
-            games={filteredNewGames}
-            onGameClick={handleGameClick}
+            title="Mejor Casino en Vivo"
+            games={topLiveGames}
             icon={Nuevos}
+            link={PATHS.liveCasino}
           />
         )}
 
-        {filteredLiveCasino.length > 0 && (
+        {topCrashGames.length > 0 && (
           <GameSection
-            title="Top Live Casino"
-            games={filteredLiveCasino}
-            onGameClick={handleGameClick}
+            title="Mejores Juegos de Crash"
+            games={topCrash}
             icon={BlackJack}
-          />
-        )}
-
-        {filteredMegaways.length > 0 && (
-          <GameSection
-            title="Megaways"
-            games={filteredMegaways}
-            onGameClick={handleGameClick}
-            icon={Megaways}
+            link={PATHS.crash}
           />
         )}
         
         <PromoCards />
       </main>
 
-      <GameModal
-        game={selectedGame}
-        isOpen={isGameModalOpen}
-        onClose={handleCloseModal}
-      />
     </Layout>      
   );
 };

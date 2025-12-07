@@ -84,3 +84,42 @@
   scrollbar-width: none;
 }
 
+
+/* tailwind.css or global.css */
+@keyframes modalDrop {
+  0% { opacity: 0; transform: translateY(-10px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes modalFadeOut {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-10px) scale(0.97); }
+}
+
+.animate-modalDrop {
+  animation: modalDrop 0.5s ease-out forwards;
+}
+
+.animate-modalFadeOut {
+  animation: modalFadeOut 0.5s ease-in forwards;
+}
+
+/* Backdrop fade */
+@keyframes backdropFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes backdropFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-backdropIn {
+  animation: backdropFadeIn 0.5s ease-out forwards;
+}
+
+.animate-backdropOut {
+  animation: backdropFadeOut 0.5s ease-in forwards;
+}
+

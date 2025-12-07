@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import slotsIcon from "../assets/custom-icons/slots.png";
 import jackpotIcon from "../assets/custom-icons/jackpot.png";
@@ -12,6 +13,8 @@ export const TopButtonsNav = () => {
   const isDown = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+
+  const Navigate = useNavigate();
 
   // Always start from left on mobile
   useEffect(() => {
@@ -42,13 +45,17 @@ export const TopButtonsNav = () => {
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
+  const handleLinkBtn = (linkAddress) => {
+    Navigate(linkAddress);
+  }
+
   const items = [
-    { label: "Slots", icon: slotsIcon },
-    { label: "Jackpot", icon: jackpotIcon },
-    { label: "Megaways", icon: megawaysIcon },
-    { label: "Ruletas", icon: ruletasIcon },
-    { label: "Table Games", icon: tableIcon },
-    { label: "Bingo", icon: bingoIcon },
+    { label: "Jokers", icon: slotsIcon, path: "/jokers"},
+    { label: "Caliente", icon: jackpotIcon, path: "/hot"},
+    { label: "Megaways", icon: megawaysIcon, path: "/megaways"},
+    { label: "Ruletas", icon: ruletasIcon, path: "/ruletas" },
+    // { label: "Table Games", icon: tableIcon },
+    // { label: "Bingo", icon: bingoIcon },
   ];
 
   return (
@@ -66,6 +73,7 @@ export const TopButtonsNav = () => {
             key={item.label}
             className="py-1 rounded-full h-6 bg-[#222] w-32 sm:w-50 xl:w-60 lg:w-60 text-white hover:bg-[#333] transition text-[12px]
                        flex justify-center items-center"
+            onClick={() => handleLinkBtn(item.path)}
           >
             <span className="flex items-center gap-2">
               <img src={item.icon} alt={item.label} className="w-3 h-3" />

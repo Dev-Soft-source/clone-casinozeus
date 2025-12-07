@@ -23,7 +23,7 @@ export function UpdatePasswordModal({ open, onClose }) {
 
   const handleLogout = () => {
     logOut();
-    navigate("/login");
+    onClose();
   };
 
   const handleClose = () => {

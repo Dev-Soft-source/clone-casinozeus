@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, Slide, Stack } from "@mui/material";
 import { useCommonMediaQueries } from "./../../features/common_funcs/useCommonMediaQueries"
 import CloseIcon from "@mui/icons-material/Close";
-import WhatsAppIcon from "./../../assets/img/support/whatsapp.svg";
-import TelegramIcon from "../../assets/img/support/telegram.svg";
-import EmailIcon from "../../assets/img/support/email.svg";
-import { showErrorToast, showSuccessToast } from "../../components/CustomToast";
+import WhatsAppIcon from "@/assets/img/support/whatsapp.png";
+import TelegramIcon from "@/assets/img/support/telegram.png";
+import EmailIcon from "@/assets/img/support/email.png";
+import { enqueueSnackbar } from "notistack";
 
 export const SupportModal = ({ address, close }) => {
     const { xxSmallScreen, mediumScreen } = useCommonMediaQueries();
@@ -23,10 +23,20 @@ export const SupportModal = ({ address, close }) => {
     const copyText = (text) => {
         navigator.clipboard.writeText(text)
             .then(() => {
-                showSuccessToast("Se ha copiado el dato al portapapeles.");                
+                enqueueSnackbar("Se ha copiado el dato al portapapeles.", {
+                    variant: "success",
+                    autoHideDuration: 5000,
+                    onExited: () => {
+                    },
+                  });
             })
             .catch(() => {
-                showErrorToast("error.");
+                enqueueSnackbar("error.", {
+                    variant: "error",
+                    autoHideDuration: 5000,
+                    onExited: () => {
+                    },
+                  });
             });
     };
 
@@ -115,7 +125,7 @@ export const SupportModal = ({ address, close }) => {
                         <Stack direction="row" alignItems="center" spacing={1.5}>
                             <Box component="img" src={WhatsAppIcon} sx={{ width: 25 }} />
                             <Typography color="#FFFFFF">
-                                Whatsapp: +541144119988
+                                Whatsapp: {address.support_whatsapp}
                             </Typography>
                         </Stack>
 
@@ -139,7 +149,7 @@ export const SupportModal = ({ address, close }) => {
                         <Stack direction="row" alignItems="center" spacing={1.5}>
                             <Box component="img" src={TelegramIcon} sx={{ width: 25 }} />
                             <Typography color="#FFFFFF">
-                                Telegram: +541144119988
+                                Telegram: {address.support_telegram}
                             </Typography>
                         </Stack>
 
@@ -163,7 +173,7 @@ export const SupportModal = ({ address, close }) => {
                         <Stack direction="row" alignItems="center" spacing={1.5}>
                             <Box component="img" src={EmailIcon} sx={{ width: 25 }} />
                             <Typography color="#FFFFFF">
-                                Email: soporte@tucasino.com
+                                Email: {address.support_email}
                             </Typography>
                         </Stack>
 

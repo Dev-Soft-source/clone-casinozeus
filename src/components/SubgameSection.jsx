@@ -1,16 +1,16 @@
 import React, {useState, useContext} from 'react';
-import { GameCard } from './GameCard';
+import { SubgameCard } from './SubgameCard';
 import { Button } from './ui/button';
 import { ChevronRight } from 'lucide-react';
 import { GameModal } from './Modals/GameModal';
 import { useUser } from '@/features/user/useUser';
 import { PATHS } from '@/features/navigation/paths';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGames } from '@/features/games/useGames';
 import { AppContext } from '@/AppContext';
 
 
-export const GameSection = ({ title, games, icon, link }) => {
+export const SubgameSection = ({ title, games, loading }) => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState(false);
   const { user, token} = useUser();
@@ -19,11 +19,13 @@ export const GameSection = ({ title, games, icon, link }) => {
   const { contextData } = useContext(AppContext);
 
   const session = localStorage.getItem("session");
-  // if (!contextData.session) {
-  //   localStorage.removeItem("Casinozeus_user");
-  //   localStorage.removeItem("Casinozeus_token");
-  //   navigate(PATHS.home);
-  // }
+//   if (!contextData.session) {
+//     console.log("sldkfjsldjfsdlfkjsdlf");
+//     localStorage.removeItem("Casinozeus_user");
+//     localStorage.removeItem("Casinozeus_token");
+//     navigate(PATHS.home);
+//   }
+
   const handleGameClick = (game) => {
     if(user && session){
         startGameSession(game.id);
@@ -42,29 +44,28 @@ export const GameSection = ({ title, games, icon, link }) => {
     setTimeout(() => setSelectedGame(null), 300);
   }; 
 
+  const Spinner = () => (
+    <div className="flex items-center justify-center">
+        <div className="w-7 h-7 border-4 border-gray-200 border-t-gray-700 rounded-full animate-spin"></div>
+    </div>
+    );
+
   return (
     <section>
       <div className="container mx-auto px-4 mt-6">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
-            <img src={icon} className='w-5 h-5'></img>
             {/* {icon && <span className="text-2xl">{icon}</span>} */}
-            <h2 className="font-sans text-[20px] font-bold">{title}</h2>
+            <h2 className="font-sans text-[30px] font-bold">{title}</h2>
+            {loading && <Spinner />}
           </div>
-
-          <Link
-            to={link}
-            className="text-white font-bold bg-[#262626] p-1 text-[12px] px-2 rounded-lg"
-          >
-            Ver Más
-          </Link>
         </div>
 
         {/* Games Grid */}
         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-4">
           {games.map((game) => (
-            <GameCard
+            <SubgameCard
              key={game.id} 
              game={game} 
              onClick={handleGameClick} />

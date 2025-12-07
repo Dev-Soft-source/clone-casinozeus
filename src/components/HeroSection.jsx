@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Sparkles } from "lucide-react";
 import Casino from "../assets/img/banners/casino_desktop.jpg";
 import Slot from "../assets/img/banners/slots_desktop.jpg";
 import Sports from "../assets/img/banners/sports_desktop.jpg";

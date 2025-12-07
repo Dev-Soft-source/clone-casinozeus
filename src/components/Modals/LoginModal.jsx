@@ -21,13 +21,13 @@ export function LoginModal({ open, onOpenChange }) {
     // call logIn, and close dialog only on success
     logIn(username, password, () => {
       startClose(); // close modal
-      const redirect = localStorage.getItem("redirectAfterLogin");
-      if (redirect) {
-        navigate(redirect, { replace: true });
-        localStorage.removeItem("redirectAfterLogin");
-      } else {
-        navigate("/", { replace: true });
-      }
+      // const redirect = localStorage.getItem("redirectAfterLogin");
+      // if (redirect) {
+      //   navigate(redirect, { replace: true });
+      //   localStorage.removeItem("redirectAfterLogin");
+      // } else {
+      //   navigate("/", { replace: true });
+      // }
     });
   };
 
@@ -75,7 +75,7 @@ export function LoginModal({ open, onOpenChange }) {
       onMouseDown={handleBackdropClick}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-yellow/60 backdrop-blur-sm transition-opacity"></div>
+      <div className="absolute inset-0 bg-yellow-50/15 backdrop-blur-sm "></div>
 
       {/* Modal */}
       <div
@@ -108,13 +108,12 @@ export function LoginModal({ open, onOpenChange }) {
           {/* Password */}
           <div>
             <label className="text-[12px] text-white">Contraseña</label>
-
-            <div className="flex items-center w-full mt-1 bg-white rounded-full overflow-hidden">
+            <div className="flex items-center w-full mt-1 bg-white rounded-full overflow-hidden focus:outline-2">
               <input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
-                className="flex-1 bg-transparent px-4 py-2.5 text-black h-9 focus:outline-none"
+                className="w-full  rounded-s-2xl bg-white/95 px-4 py-2.5 h-9"
                 required
               />
 
@@ -135,8 +134,7 @@ export function LoginModal({ open, onOpenChange }) {
           <div className="w-full flex justify-end mt-5">
             <button type="submit" className="group h-8 w-[80px] rounded-full p-[2px] mt-5 bg-blue-600 shadow-[0_0_8px_rgba(0,0,0,0.4)]">
               <span
-                className="flex items-center justify-center w-full h-full rounded-full bg-gradient-to-r from-pink-600 to-pink-700
-                                        text-white font-semibold text-sm tracking-wide group-hover:from-pink-700 group-hover:to-pink-800 transition-all duration-300"
+                className="flex items-center justify-center w-full h-full rounded-full bg-gradient-to-r from-pink-600 to-pink-700 text-white font-semibold text-sm tracking-wide group-hover:from-pink-700 group-hover:to-pink-800 transition-all duration-300"
               >
                 Entrar
               </span>

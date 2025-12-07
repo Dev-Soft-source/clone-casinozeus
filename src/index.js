@@ -10,6 +10,13 @@ import { store } from "./utils/store";
 import AppContextProvider from "./AppContext.jsx";
 import { GameDataProvider } from "./components/GameDataContext.jsx";
 import NotificationSnack from './components/notifications/NotificationSnack';
+import favicon from "@/assets/favicon.webp";
+
+const link = document.createElement("link");
+link.rel = "icon";
+link.type = "image/png";
+link.href = favicon;
+document.head.appendChild(link);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
