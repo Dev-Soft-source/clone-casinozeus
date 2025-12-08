@@ -1,24 +1,34 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import { HeroSection } from '../components/HeroSection';
-import { GameSection } from '@/components/GameSection';
-import { ProviderFilter } from '../components/ProviderFilter';
-import { AppContext } from '@/AppContext';
-import { callApi } from '@/utils/Utils';
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { GameSection } from "@/components/GameSection";
+import { ProviderFilter } from "../components/ProviderFilter";
+import { AppContext } from "@/AppContext";
+import { callApi } from "@/utils/Utils";
+import FaqSection from "@/components/FaqSection";
 
-import { Layout } from '../components/Layout';
+import Casino from "../assets/img/banners/casino_seccion_desktop.jpg";
+import Slot from "../assets/img/banners/slots_desktop.jpg";
+import Vipro from "../assets/img/banners/viproulette_desktop.jpg";
+
+import { Layout } from "../components/Layout";
 
 export const SectionPage = ({ address, pagename }) => {
   const calledRef = useRef(false);
   const [categories, setCategories] = useState([]);
-  const [groupedCasinoGames, setGroupedCasinoGames] = useState([]);  
-  const {contextData} = useContext(AppContext);
+  const [groupedCasinoGames, setGroupedCasinoGames] = useState([]);
+  const { contextData } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [ banner, setBanner ] = useState("");
+  const images = [Slot, Casino, Vipro];
 
   useEffect(() => {
-    if (calledRef.current) return;
-    calledRef.current = true;
-
+    console.log("sldkfjsldfjsdlfsjdlfsdjlfksdjf", pagename);
     const fetchData = async () => {
+      if(pagename === "arcade")
+        setBanner(images[0]);
+      else if(pagename === "home")
+        setBanner(images[1]);
+      else
+        setBanner(images[2]);
       try {
         const pageData = await getPage(pagename);
         const casinoData = await getCasinos();
@@ -43,7 +53,10 @@ export const SectionPage = ({ address, pagename }) => {
 
   const getCasinos = () =>
     new Promise((resolve) => {
-      callApi(contextData, "GET", `/get-top-category-content?group=default_pages_${pagename}`,
+      callApi(
+        contextData,
+        "GET",
+        `/get-top-category-content?group=default_pages_${pagename}`,
         (result) => {
           if (result.status === 500 || result.status === 422) resolve({});
           else resolve(result.data);
@@ -63,18 +76,28 @@ export const SectionPage = ({ address, pagename }) => {
   );
 
   if (isLoading) {
-    return (
-        <Spinner />
-    );
+    return <Spinner />;
   }
 
   return (
     <Layout address={address}>
       <main>
-        <HeroSection />
-        
-        <ProviderFilter providers={categories}/>
-        
+        <div className="flex justify-center items-center px-2 w-full">
+          <section className="relative mt-4 w-full container rounded-2xl overflow-hidden">
+            <div className="relative h-[180px] md:h-[240px] lg:h-[360px] xl:h-[360px]">
+              <div className="absolute inset-0 overflow-hidden">
+                <img
+                  src={banner}
+                  alt="hero"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <ProviderFilter providers={categories} />
+
         {groupedCasinoGames?.map((group, index) => {
           if (!group.top_content?.length) return null;
 
@@ -103,8 +126,8 @@ export const SectionPage = ({ address, pagename }) => {
           );
         })}
 
+          <FaqSection />
       </main>
-
-    </Layout>      
+    </Layout>
   );
 };

@@ -3,29 +3,34 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "react-router-dom";
-import { SubgameSection } from "@/components/SubgameSection";
+import { SearchGameSection } from "@/components/SearchGameSection";
 import { AppContext } from "@/AppContext";
 import { callApi } from "@/utils/Utils";
-import { enqueueSnackbar } from "notistack";
 import { Layout } from "@/components/Layout";
 import { ProviderModal } from "@/components/Modals/ProviderModal";
 
 export const SearchPage = ({ categories, address }) => {
   const { contextData } = useContext(AppContext);
   const calledRef = useRef(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [searchParams] = useSearchParams();
   const [foundGames, setFoundGames] = useState([]);
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const query = searchParams.get("query");
   useEffect(() => {
     if (calledRef.current) return;
     calledRef.current = true;
-    getSearchResult(query);
+    setSearchTerm(searchParams.get("query"));
   }, []);
+
+  useEffect(() => {
+    if(searchTerm !== "")
+      getSearchResult(searchTerm);
+    else
+      setFoundGames([]);
+      
+  }, [searchTerm]);
 
   const getSearchResult = (term) => {
     setFoundGames([]);
@@ -89,18 +94,16 @@ export const SearchPage = ({ categories, address }) => {
           />
         </div>
 
-        {/* Show message if search returns no results */}
-        {searchQuery && (
-          <div className="container mx-auto px-4 py-12 text-center">
-            <p className="text-muted-foreground">
-              No se encontraron juegos para "{searchQuery}"
-            </p>
-          </div>
-        )}
-
-        {foundGames.length > 0 && (
-          <SubgameSection title={query} games={foundGames} loading={isLoading} />
-        )}
+        {foundGames.length > 0 ? (
+          <SearchGameSection title={searchTerm} games={foundGames} loading={isLoading} />
+        ) : (
+          <div className="container mx-auto px-4 mt-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-3">
+                <h2 className="font-sans text-[30px] font-bold"> No se encontraron resultados.</h2>
+              </div>
+            </div>
+          </div>)}
       </main>
     </Layout>
   );

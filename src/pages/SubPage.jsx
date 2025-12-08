@@ -12,7 +12,6 @@ export const SubPage = ({ categories, address, pagename }) => {
     const { contextData } = useContext(AppContext);
     const [games, setGames] = useState([]);
     const calledRef = useRef(false);
-    const [searchQuery, setSearchQuery] = useState('');
     const changeName = {"joker": "Jokers", "hot": "Callente", "megaways": "Megaways", "roulette": "Ruletas"}
 
     useEffect(() => {
@@ -49,18 +48,9 @@ export const SubPage = ({ categories, address, pagename }) => {
         });    
     
     return (
-        <Layout address={address} onSearch={setSearchQuery}>
+        <Layout address={address}>
             <main>
                 <ProviderFilter providers={categories} />
-
-                {/* Show message if search returns no results */}
-                {searchQuery && (
-                        <div className="container mx-auto px-4 py-12 text-center">
-                            <p className="text-muted-foreground">
-                                No se encontraron juegos para "{searchQuery}"
-                            </p>
-                        </div>
-                    )}
 
                 {games.length > 0 && (
                     <SubgameSection

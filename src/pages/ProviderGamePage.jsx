@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGames } from "@/features/games/useGames";
 import { AppContext } from "@/AppContext";
 import { Layout } from "@/components/Layout";
+import { ProviderFilter } from "@/components/ProviderFilter";
 import { callApiService, callApi } from "@/utils/Utils";
 
 export const ProviderGamePage = ({ address }) => {
@@ -18,7 +19,7 @@ export const ProviderGamePage = ({ address }) => {
   const [searchParams] = useSearchParams();
   const pageName = searchParams.get("pageName");
   const providerName = searchParams.get("providerName");
-
+  const [providerImage, setProviderImage] = useState(null);
   const [categories, setCategories] = useState([]);
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,12 @@ export const ProviderGamePage = ({ address }) => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState(false);
 
-  const pageRef = useRef(0);
+  const pageCurrent = useRef(0);
+  const loadMoreInterval = useRef(null);
+  const pageSize = 20;
 
   /* -------------------------
-   API: Categories
+     API: Categories
   ------------------------- */
   useEffect(() => {
     if (!pageName) return;
@@ -49,26 +52,16 @@ export const ProviderGamePage = ({ address }) => {
   }, [pageName, contextData]);
 
   /* -------------------------
-   Selected Category
+     Selected Category
   ------------------------- */
   const selectedCategory = useMemo(() => {
     return categories.find((c) => c.name === providerName);
   }, [categories, providerName]);
 
   /* -------------------------
-   Fetch Games
+     Fetch Games
   ------------------------- */
-  useEffect(() => {
-    if (!selectedCategory) return;
-
-    pageRef.current = 0;
-    setGames([]);
-    fetchGames(selectedCategory, 0);
-  }, [selectedCategory]);
-
   const fetchGames = (category, page) => {
-    const pageSize = 30;
-
     const apiUrl =
       `/games/?page_group_type=categories&page_group_code=default_pages_home` +
       `&table_name=${category.table_name}` +
@@ -84,17 +77,43 @@ export const ProviderGamePage = ({ address }) => {
           [...prev, ...res.data].forEach((g) => map.set(g.id, g));
           return Array.from(map.values());
         });
+
+        if (res.data.length < pageSize && loadMoreInterval.current) {
+          clearInterval(loadMoreInterval.current);
+          loadMoreInterval.current = null;
+        }
       }
       setLoading(false);
     });
   };
 
   /* -------------------------
-   Events
+     Load more games
+  ------------------------- */
+  useEffect(() => {
+    if (!selectedCategory) return;
+
+    setProviderImage(selectedCategory.image_local ? contextData.cdnUrl + selectedCategory.image_local : null);
+
+    pageCurrent.current = 0;
+    setGames([]);
+    fetchGames(selectedCategory, 0);
+
+    if (loadMoreInterval.current) clearInterval(loadMoreInterval.current);
+
+    loadMoreInterval.current = setInterval(() => {
+      pageCurrent.current += 1;
+      fetchGames(selectedCategory, pageCurrent.current);
+    }, 3000);
+
+    return () => clearInterval(loadMoreInterval.current);
+  }, [selectedCategory, contextData]);
+
+  /* -------------------------
+     Game click events
   ------------------------- */
   const handleGameClick = (game) => {
     const session = localStorage.getItem("session");
-
     if (user && session) {
       startGameSession(game.id);
       navigate(`${PATHS.launchGame}?internalId=${game.id}`);
@@ -115,9 +134,6 @@ export const ProviderGamePage = ({ address }) => {
     setTimeout(() => setSelectedGame(null), 300);
   };
 
-  /* -------------------------
-   UI
-  ------------------------- */
   const Spinner = () => (
     <div className="flex items-center justify-center">
       <div className="w-7 h-7 border-4 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
@@ -127,8 +143,10 @@ export const ProviderGamePage = ({ address }) => {
   return (
     <Layout address={address}>
       <main>
+        <ProviderFilter providers={categories} />
         <section className="container mx-auto px-4 mt-6">
           <div className="flex items-center gap-3 mb-4">
+            {providerImage && <img src={providerImage} className="h-10 w-10" alt={providerName} />}
             <h2 className="text-[30px] font-bold">{providerName}</h2>
             {loading && <Spinner />}
           </div>

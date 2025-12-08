@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useUser } from "@/features/user/useUser";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "@/features/navigation/paths";
 import { useGames } from "@/features/games/useGames";
+import { AppContext } from "@/AppContext";
 
 export function GameModal({ game, open, onOpenChange }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,8 @@ export function GameModal({ game, open, onOpenChange }) {
   const { logIn, isLogInLoading } = useUser();
   const navigate = useNavigate();
   const { startGameSession } = useGames();
+  const [filterGame, setFilterGame] = useState({});
+  const { contextData} = useContext(AppContext);
   if(game)
     localStorage.setItem("redirectAfterLogin", `${PATHS.launchGame}?internalId=${game.id}`);
   const startClose = () => {
@@ -45,6 +48,23 @@ export function GameModal({ game, open, onOpenChange }) {
   // ESC close
   useEffect(() => {
     if (!open) return;
+    if(!game.image){
+      let imageDataSrc = game.image_url;
+      if (game.image_local !== null) {
+        imageDataSrc = contextData.cdnUrl + game.image_local;
+      }
+      setFilterGame((prev) => ({
+        ...prev,
+        name: game.name,
+        image: imageDataSrc
+      }));
+    }else{
+      setFilterGame((prev) => ({
+        ...prev,
+        name: game.name,
+        image: game.image
+      }));
+    }
 
     const handleEsc = (e) => {
       if (e.key === "Escape") startClose();
@@ -93,11 +113,11 @@ export function GameModal({ game, open, onOpenChange }) {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-5">
 
-          {game?.image && (
+          {filterGame?.image && (
             <div className="w-full flex justify-center">
               <img
-                src={game.image}
-                alt={game.name || "Game"}
+                src={filterGame.image}
+                alt={filterGame.name || "Game"}
                 className="w-40 h-40 object-cover rounded-full border border-[#B31250]/40"
               />
             </div>

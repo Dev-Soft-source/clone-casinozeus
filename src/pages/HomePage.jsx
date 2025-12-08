@@ -3,6 +3,7 @@ import { HeroSection } from '../components/HeroSection';
 import { ProviderFilter } from '../components/ProviderFilter';
 import { GameSection } from '../components/GameSection';
 import { PromoCards } from '../components/PromoCards';
+import BetsLogSection from '../components/BetsLogSection';
 import { AppContext } from '@/AppContext';
 import { callApi } from '@/utils/Utils';
 import Slots from '../assets/custom-icons/slots.png';
@@ -18,7 +19,7 @@ export const HomePage = ({ categories, address }) => {
   const [ topCrash, setTopCrash ] = useState([]);
   const {contextData} = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [betsData, setBetsData] = useState([])
   const calledRef = useRef(false);
   const [topGames, setTopGames] = useState([]);
   const [topLiveCasino, setTopLiveCasino] = useState([]);
@@ -41,6 +42,7 @@ export const HomePage = ({ categories, address }) => {
   useEffect(() => {
     if (calledRef.current) return;
     calledRef.current = true;
+    handleMybet();
     getCategories();
   }, []);
  
@@ -61,6 +63,24 @@ export const HomePage = ({ categories, address }) => {
       setTopCasino(games);
     }
   }, [topGames]);
+
+  const handleMybet = (async () => {
+    try {
+      const winnerData = await getAllWinners();
+      setBetsData(winnerData || []);
+    }
+    catch (err) {
+      showErrorToast("¡Error del servidor!")
+    }
+  })
+
+  const getAllWinners = () =>
+    new Promise((resolve) => {
+      callApi(contextData, "GET", '/get-prize-ranking', (result) => {
+        if (result.status === 500 || result.status === 422) resolve({});
+        else resolve(result.data);
+      });
+    });
 
   useEffect(() => {
     if (topLiveCasino && topLiveCasino.length > 0) {
@@ -155,7 +175,7 @@ export const HomePage = ({ categories, address }) => {
             link={PATHS.crash}
           />
         )}
-        
+        <BetsLogSection betsData={betsData} />
         <PromoCards />
       </main>
 

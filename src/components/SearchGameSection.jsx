@@ -10,13 +10,12 @@ import { useGames } from '@/features/games/useGames';
 import { AppContext } from '@/AppContext';
 
 
-export const SubgameSection = ({ title, games, loading }) => {
+export const SearchGameSection = ({ title, games, loading }) => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState(false);
   const { user, token} = useUser();
   const navigate = useNavigate();
   const { startGameSession } = useGames();
-  const { contextData } = useContext(AppContext);
 
   const session = localStorage.getItem("session");
 //   if (!contextData.session) {
@@ -41,7 +40,7 @@ export const SubgameSection = ({ title, games, loading }) => {
   const handleCloseModal = () => {
     console.log(isGameModalOpen)
     setIsGameModalOpen(false);
-    setTimeout(() => setSelectedGame(null), 200);
+    setTimeout(() => setSelectedGame(null), 300);
   }; 
 
   const Spinner = () => (
@@ -57,7 +56,7 @@ export const SubgameSection = ({ title, games, loading }) => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
             {/* {icon && <span className="text-2xl">{icon}</span>} */}
-            <h2 className="font-sans text-[30px] font-bold">{title}</h2>
+            <h2 className="font-sans text-[30px] font-bold">Búsqueda: {title}</h2>
             {loading && <Spinner />}
           </div>
         </div>

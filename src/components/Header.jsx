@@ -1,15 +1,18 @@
 import React, { useState, useContext } from "react";
 import { Button } from "./ui/button";
 import { LoginModal } from "./Modals/LoginModal";
+import { useNavigate } from "react-router-dom";
 import { UpdatePasswordModal } from "./Modals/UpdatePasswordModal";
 import { useUser } from "@/features/user/useUser";
 import { SupportModal } from "./Modals/SupportModal";
+import { motion, AnimatePresence } from "framer-motion";
+import { AppContext } from "@/AppContext";
+
 import { ReactComponent as CasinoZeus } from "../assets/img/domains/casinozeus.svg";
 import Profile from "../assets/custom-icons/misc/perfil.png";
 import Dinero from "../assets/custom-icons/misc/dinero.png";
 import Unregister from "../assets/custom-icons/misc/login.png";
 import MenuImg from "../assets/custom-icons/misc/menu.svg";
-import { AppContext } from "@/AppContext";
 
 export const Header = ({address}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,6 +21,7 @@ export const Header = ({address}) => {
   const {user} = useUser();
   const { contextData } = useContext(AppContext);
   const [ support, setSupport ] = useState(false);
+  const navigate = useNavigate ();
 
   const session = localStorage.getItem("session");
   if(!session)
@@ -25,6 +29,13 @@ export const Header = ({address}) => {
     localStorage.removeItem("Casinozeus_user");
     localStorage.removeItem("Casinozeus_token");
   }
+
+  const menuItems = [
+    { label: "Casino", icon: "🏠", link:"/casino" },
+    { label: "Casino en Vivo", icon: "🃏", link:"/live-casino" },
+    { label: "Crash", icon: "🎰", link:"/crash" },
+    { label: "Deportes", icon: "⚽", link:"/sport" },
+  ];
 
   return (
     <>
@@ -128,90 +139,46 @@ export const Header = ({address}) => {
           </div>
         </div>
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden border-t border-border bg-card">
-            <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-              <a
-                href="#casino"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Casino en Vivo
-              </a>
-              <a
-                href="#slots"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Slots
-              </a>
-              <a
-                href="#deportes"
-                className="text-sm text-muted-foreground font-medium"
-              >
-                Deportes
-              </a>
-              <a
-                href="#soporte"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Soporte
-              </a>
-            </nav>
-          </div>
-        )}
-      </header>
+        <AnimatePresence>
+  {isMenuOpen && (
+    <motion.div
+      initial={{ opacity: 0, y: -12, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -8, scale: 0.98 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="absolute w-full bg-[#1e1e1e] rounded-xl p-6 space-y-4 shadow-xl justify-center items-center"
+    >
+      {menuItems.map((item) => (
+        <button
+          key={item.label}
+          onClick={() => {
+            navigate(item.link);
+            setIsMenuOpen(false);
+          }}
+          className="w-full items-center py-2 gap-3 bg-[#0f0f0f] rounded-lg text-white hover:text-[#c22653] transition"
+        >
+          <span className="text-lg">{item.icon}</span>
+          <span className="text-sm font-medium tracking-wide"> {item.label} </span>
+        </button>
+      ))}
 
-      {/* Auth Dialog
-      <Dialog open={isAuthOpen} onOpenChange={setIsAuthOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Bienvenido</DialogTitle>
-            <DialogDescription>
-              Inicia sesión o crea una cuenta para empezar a jugar
-            </DialogDescription>
-          </DialogHeader>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="register">Registrarse</TabsTrigger>
-            </TabsList>
-            <TabsContent value="login" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
-                <Input id="email" type="email" placeholder="tu@email.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
-                <Input id="password" type="password" placeholder="••••••••" />
-              </div>
-              <Button className="w-full" onClick={() => setIsAuthOpen(false)}>
-                Iniciar Sesión
-              </Button>
-            </TabsContent>
-            <TabsContent value="register" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre Completo</Label>
-                <Input id="name" placeholder="Juan Pérez" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email-reg">Correo Electrónico</Label>
-                <Input id="email-reg" type="email" placeholder="tu@email.com" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password-reg">Contraseña</Label>
-                <Input
-                  id="password-reg"
-                  type="password"
-                  placeholder="••••••••"
-                />
-              </div>
-              <Button className="w-full" onClick={() => setIsAuthOpen(false)}>
-                Crear Cuenta
-              </Button>
-            </TabsContent>
-          </Tabs>
-        </DialogContent>
-      </Dialog>
-       */}
+      <button
+        onClick={() => {
+          setSupport(true);
+          setIsMenuOpen(false);
+        }}
+        className="w-full items-center py-2 gap-3 bg-[#0f0f0f] rounded-lg text-white hover:text-[#c22653] transition"
+      >
+        <span className="text-lg">🛎️</span>
+        <span className="text-sm font-medium tracking-wide"> Soporte </span>
+      </button>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+
+      </header>
+  
       <LoginModal open={isAuthOpen} onOpenChange={setIsAuthOpen} />
 
       <UpdatePasswordModal open={open} onClose={() => setOpen(false)} />

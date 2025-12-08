@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import { GameCard } from './GameCard';
 import { Button } from './ui/button';
 import { ChevronRight } from 'lucide-react';
@@ -17,13 +17,13 @@ export const GameSection = ({ title, games, icon, link }) => {
   const navigate = useNavigate();
   const { startGameSession } = useGames();
   const { contextData } = useContext(AppContext);
-
+  const scrollRef = useRef(null);
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const isMobile = window.innerWidth < 640;
   const session = localStorage.getItem("session");
-  // if (!contextData.session) {
-  //   localStorage.removeItem("Casinozeus_user");
-  //   localStorage.removeItem("Casinozeus_token");
-  //   navigate(PATHS.home);
-  // }
+
   const handleGameClick = (game) => {
     if(user && session){
         startGameSession(game.id);
@@ -39,8 +39,30 @@ export const GameSection = ({ title, games, icon, link }) => {
   const handleCloseModal = () => {
     console.log(isGameModalOpen)
     setIsGameModalOpen(false);
-    setTimeout(() => setSelectedGame(null), 300);
+    setTimeout(() => setSelectedGame(null), 200);
   }; 
+
+  const handleMouseDown = (e) => {
+    isDown.current = true;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseLeave = () => {
+    isDown.current = false;
+  };
+
+  const handleMouseUp = () => {
+    isDown.current = false;
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDown.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  };
 
   return (
     <section>
@@ -62,7 +84,18 @@ export const GameSection = ({ title, games, icon, link }) => {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-4">
+        <div 
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className={`${
+            isMobile
+              ? "grid grid-rows-2 grid-flow-col auto-cols-[140px] gap-4 overflow-x-auto whitespace-nowrap scrollbar-hide"
+              : "grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 xl:grid-cols-10 gap-4"
+          }`}
+        >
           {games.map((game) => (
             <GameCard
              key={game.id} 

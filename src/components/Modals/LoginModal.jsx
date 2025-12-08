@@ -20,14 +20,7 @@ export function LoginModal({ open, onOpenChange }) {
 
     // call logIn, and close dialog only on success
     logIn(username, password, () => {
-      startClose(); // close modal
-      // const redirect = localStorage.getItem("redirectAfterLogin");
-      // if (redirect) {
-      //   navigate(redirect, { replace: true });
-      //   localStorage.removeItem("redirectAfterLogin");
-      // } else {
-      //   navigate("/", { replace: true });
-      // }
+      startClose();
     });
   };
 

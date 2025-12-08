@@ -59,7 +59,6 @@ export function SportHome({address}) {
     );
 
     return (
-        <Layout address={address}>
             <main>
                 {loading ? (
                     <Spinner />
@@ -95,6 +94,5 @@ export function SportHome({address}) {
                     </div>
                 )}
             </main>
-        </Layout>
     );
 };

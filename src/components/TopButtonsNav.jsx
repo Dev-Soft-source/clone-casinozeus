@@ -41,7 +41,7 @@ export const TopButtonsNav = () => {
     if (!isDown.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1;
+    const walk = (x - startX.current) * 2;
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
@@ -71,7 +71,7 @@ export const TopButtonsNav = () => {
         {items.map((item) => (
           <button
             key={item.label}
-            className="py-1 rounded-full h-6 bg-[#222] w-32 sm:w-50 xl:w-60 lg:w-60 text-white hover:bg-[#333] transition text-[12px]
+            className="py-1 rounded-full h-6 bg-[#222] w-28 sm:w-45 xl:w-60 lg:w-60 text-white hover:bg-[#333] transition text-[12px]
                        flex justify-center items-center"
             onClick={() => handleLinkBtn(item.path)}
           >
