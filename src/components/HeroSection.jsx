@@ -22,7 +22,7 @@ export const HeroSection = () => {
   return (
     <div className="flex justify-center items-center px-2 w-full">
       <section className="relative mt-4 w-full container rounded-2xl overflow-hidden">
-        <div className="relative h-[180px] md:h-[240px] lg:h-[360px] xl:h-[360px]">
+        <div className="relative h-[210px] md:h-[240px] lg:h-[340px] xl:h-[340px]">
           <div className="absolute inset-0 overflow-hidden">
             {images.map((img, index) => {
               let animationClass = "";

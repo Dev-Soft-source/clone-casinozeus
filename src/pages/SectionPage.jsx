@@ -12,7 +12,6 @@ import Vipro from "../assets/img/banners/viproulette_desktop.jpg";
 import { Layout } from "../components/Layout";
 
 export const SectionPage = ({ address, pagename }) => {
-  const calledRef = useRef(false);
   const [categories, setCategories] = useState([]);
   const [groupedCasinoGames, setGroupedCasinoGames] = useState([]);
   const { contextData } = useContext(AppContext);
@@ -21,7 +20,6 @@ export const SectionPage = ({ address, pagename }) => {
   const images = [Slot, Casino, Vipro];
 
   useEffect(() => {
-    console.log("sldkfjsldfjsdlfsjdlfsdjlfksdjf", pagename);
     const fetchData = async () => {
       if(pagename === "arcade")
         setBanner(images[0]);
@@ -126,7 +124,7 @@ export const SectionPage = ({ address, pagename }) => {
           );
         })}
 
-          <FaqSection />
+          {/* <FaqSection /> */}
       </main>
     </Layout>
   );

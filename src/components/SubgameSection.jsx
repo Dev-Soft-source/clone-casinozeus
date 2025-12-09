@@ -39,7 +39,6 @@ export const SubgameSection = ({ title, games, loading }) => {
   };
 
   const handleCloseModal = () => {
-    console.log(isGameModalOpen)
     setIsGameModalOpen(false);
     setTimeout(() => setSelectedGame(null), 200);
   }; 

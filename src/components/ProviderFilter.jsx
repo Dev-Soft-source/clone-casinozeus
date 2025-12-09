@@ -19,25 +19,24 @@ export const ProviderFilter = ({providers, pagename}) => {
   };
 
   return (
-    <div className="pt-6">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center gap-4 overflow-x-auto hide-scrollbar py-2">
+    <div className="pt-4">
+      <div >
+        <div className="flex items-center justify-center gap-2 overflow-x-auto hide-scrollbar py-2">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Buscar juegos..."
+              placeholder="BUSCAR JUEGOS"
               value={searchTerm}
               onKeyDown={handleKeyDown}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-64 h-8 rounded-full bg-secondary/50 border border-border/50 focus-visible:ring-0 focus-visible:border-pink-500/40 focus-visible:shadow-[0_0_2px_2px_rgba(255,0,128,0.45)]"
+              className="pl-10 w-64 h-7 rounded-full bg-secondary/20 border text-[12px] border-border/50 focus-visible:ring-0 focus-visible:border-pink-500/40 focus-visible:shadow-[0_0_2px_2px_rgba(255,0,128,0.45)]"
             />
           </div>
 
           <Button
-            size="sm"
-            className="whitespace-nowrap rounded-full w-44 h-7 leading-none"
+            className="whitespace-nowrap rounded-full w-44 h-7 text-[13px] bg-[#b22549]"
             onClick={() => setOpen(true)}
           >
             PROVEEDORES
