@@ -7,7 +7,7 @@ import { Building2 } from "lucide-react";
 import { ProviderModal } from "./Modals/ProviderModal";
 import { PATHS } from "@/features/navigation/paths";
 
-export const ProviderFilter = ({providers}) => {
+export const ProviderFilter = ({providers, pagename}) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
@@ -49,6 +49,7 @@ export const ProviderFilter = ({providers}) => {
         open={open}
         onClose={() => setOpen(false)}
         providers={providers}
+        pagename={pagename}
       />
     </div>
   );

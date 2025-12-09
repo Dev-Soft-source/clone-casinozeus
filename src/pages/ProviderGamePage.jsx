@@ -143,7 +143,7 @@ export const ProviderGamePage = ({ address }) => {
   return (
     <Layout address={address}>
       <main>
-        <ProviderFilter providers={categories} />
+        <ProviderFilter providers={categories} pagename={pageName}/>
         <section className="container mx-auto px-4 mt-6">
           <div className="flex items-center gap-3 mb-4">
             {providerImage && <img src={providerImage} className="h-10 w-10" alt={providerName} />}
@@ -151,7 +151,7 @@ export const ProviderGamePage = ({ address }) => {
             {loading && <Spinner />}
           </div>
 
-          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-4">
             {games.map((game) => (
               <SubgameCard
                 key={`${selectedCategory?.id}-${game.id}`}

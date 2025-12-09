@@ -96,7 +96,7 @@ export const SectionPage = ({ address, pagename }) => {
           </section>
         </div>
 
-        <ProviderFilter providers={categories} />
+        <ProviderFilter providers={categories} pagename={pagename}/>
 
         {groupedCasinoGames?.map((group, index) => {
           if (!group.top_content?.length) return null;

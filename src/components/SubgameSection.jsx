@@ -63,7 +63,7 @@ export const SubgameSection = ({ title, games, loading }) => {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-4">
           {games.map((game) => (
             <SubgameCard
              key={game.id} 

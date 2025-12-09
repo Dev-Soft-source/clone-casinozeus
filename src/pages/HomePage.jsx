@@ -7,7 +7,6 @@ import BetsLogSection from '../components/BetsLogSection';
 import { AppContext } from '@/AppContext';
 import { callApi } from '@/utils/Utils';
 import Slots from '../assets/custom-icons/slots.png';
-import Megaways from '../assets/custom-icons/megaways.png';
 import Nuevos from '../assets/custom-icons/nuevo.webp';
 import BlackJack from '../assets/custom-icons/blackjack.webp';
 import { Layout } from '../components/Layout';
@@ -44,6 +43,7 @@ export const HomePage = ({ categories, address }) => {
     calledRef.current = true;
     handleMybet();
     getCategories();
+    localStorage.removeItem("redirectAfterLogin");
   }, []);
  
   useEffect(() => {

@@ -50,7 +50,7 @@ export const SubPage = ({ categories, address, pagename }) => {
     return (
         <Layout address={address}>
             <main>
-                <ProviderFilter providers={categories} />
+                <ProviderFilter providers={categories} pagename={pagename}/>
 
                 {games.length > 0 && (
                     <SubgameSection

@@ -1,13 +1,14 @@
 import { useContext, useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "@/AppContext";
 import { X, Search } from "lucide-react";
 import { Input } from "../ui/input";
 import Cross from "../../assets/custom-icons/close.svg";
 
-export function ProviderModal({ open, onClose, providers }) {
+export function ProviderModal({ open, onClose, providers, pagename }) {
   const { contextData } = useContext(AppContext);
   const modalRef = useRef(null);
-
+  const Navigate = useNavigate();
   // State to store search query
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -72,6 +73,12 @@ export function ProviderModal({ open, onClose, providers }) {
             return (
               <button
                 key={provider.name}
+                onClick={() => {
+                  onClose();
+                  Navigate(
+                    `/games?providerName=${encodeURIComponent(provider.name)}&pageName=${encodeURIComponent(pagename)}`
+                  );
+                }}
                 className="flex items-center gap-3 bg-[#1a1a1a] hover:bg-[#232323] transition-all p-3 rounded-[20px] border border-white/20 text-gray-300"
               >
                 <img
