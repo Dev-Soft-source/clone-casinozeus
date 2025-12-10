@@ -25,6 +25,7 @@ export const GameSection = ({ title, games, icon, link }) => {
   const session = localStorage.getItem("session");
 
   const handleGameClick = (game) => {
+    console.log("IsGame: ", isGameSessionLoading);
     if(user && session){
         if (isGameSessionLoading) {
           enqueueSnackbar("¡Inicio de sesión exitoso!", {
