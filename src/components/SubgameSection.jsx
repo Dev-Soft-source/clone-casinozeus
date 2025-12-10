@@ -8,14 +8,14 @@ import { PATHS } from '@/features/navigation/paths';
 import { useNavigate } from 'react-router-dom';
 import { useGames } from '@/features/games/useGames';
 import { AppContext } from '@/AppContext';
-
+import { enqueueSnackbar } from 'notistack';
 
 export const SubgameSection = ({ title, games, loading }) => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [isGameModalOpen, setIsGameModalOpen] = useState(false);
   const { user, token} = useUser();
   const navigate = useNavigate();
-  const { startGameSession } = useGames();
+  const { startGameSession, isGameSessionLoading } = useGames();
   const { contextData } = useContext(AppContext);
 
   const session = localStorage.getItem("session");
@@ -28,8 +28,17 @@ export const SubgameSection = ({ title, games, loading }) => {
 
   const handleGameClick = (game) => {
     if(user && session){
-        startGameSession(game.id);
-        navigate(`${PATHS.launchGame}?internalId=${game.id}`);
+      if (isGameSessionLoading) {
+        enqueueSnackbar("¡Inicio de sesión exitoso!", {
+          variant: "warning",
+          autoHideDuration: 5000,
+          onExited: () => {
+          },
+        });
+        return;
+      }
+      startGameSession(game.id);
+      navigate(`${PATHS.launchGame}?internalId=${game.id}`);
     }else if(user && !session){
         window.location.reload();
     }else{
