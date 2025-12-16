@@ -25,7 +25,6 @@ export const GameSection = ({ title, games, icon, link }) => {
   const session = localStorage.getItem("session");
 
   const handleGameClick = (game) => {
-    console.log("IsGame: ", isGameSessionLoading);
     if(user && session){
         if (isGameSessionLoading) {
           enqueueSnackbar("¡Inicio de sesión exitoso!", {
@@ -80,7 +79,7 @@ export const GameSection = ({ title, games, icon, link }) => {
         {/* Section Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
-            <img src={icon} className='w-5 h-5'></img>
+            <img src={icon} className='w-8 h-8'></img>
             {/* {icon && <span className="text-2xl">{icon}</span>} */}
             <h2 className="font-sans text-[20px] font-bold">{title}</h2>
           </div>

@@ -51,7 +51,7 @@ export const TopButtonsNav = () => {
 
   const items = [
     { label: "Jokers", icon: slotsIcon, path: "/jokers"},
-    { label: "Caliente", icon: jackpotIcon, path: "/hot"},
+    { label: "Nuevos", icon: jackpotIcon, path: "/hot"},
     { label: "Megaways", icon: megawaysIcon, path: "/megaways"},
     { label: "Ruletas", icon: ruletasIcon, path: "/ruletas" },
     // { label: "Table Games", icon: tableIcon },

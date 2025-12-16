@@ -12,7 +12,7 @@ export const SubPage = ({ categories, address, pagename }) => {
     const { contextData } = useContext(AppContext);
     const [games, setGames] = useState([]);
     const calledRef = useRef(false);
-    const changeName = {"joker": "Jokers", "hot": "Callente", "megaways": "Megaways", "roulette": "Ruletas"}
+    const changeName = {"joker": "Jokers", "hot": "Nuevos", "megaways": "Megaways", "roulette": "Ruletas"}
 
     useEffect(() => {
         if (calledRef.current) return;
